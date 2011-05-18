@@ -1,0 +1,14 @@
+{application, sli,
+ [
+  {description, "sli - to short web-links"},
+  {vsn, "1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib,
+		  riakc,
+		  mochiweb
+                 ]},
+  {mod, { sli_app, []}},
+  {env, []}
+ ]}.
