@@ -1,7 +1,9 @@
+%%% ---------------------------------------------------------------
 %%% File    : sli_checker.erl
-%%% Author  : garry <garry@garry-desktop>
+%%% Author  : Artem Golovinsky artemgolovinsky@gmail.com
 %%% Description : 
-%%% Created : 12 May 2011 by garry <garry@garry-desktop>
+%%% ---------------------------------------------------------------
+
 
 -module(sli_checker).
 
@@ -23,11 +25,37 @@ check_short(Sh) ->
     end.
 
 check_and_update_full(Full) when length(Full) < ?MAX_LONG_LINK_LENGTH ->
-    {true, add_protocol(Full, Full)};
+    case check_1(Full) of
+	{true, NewStr} ->
+	    {true, add_protocol(NewStr, NewStr)};
+	false ->
+	    false
+    end;
 
 check_and_update_full(_) ->
     false.
-    
+
+
+%% check that full url is not space
+check_1(Full) ->
+    case string:strip(Full, both, 32) of
+	[] ->
+	    false;
+	NewStr ->
+	    check_2(NewStr)
+    end.
+
+
+%% url should not contain spaces
+check_2(Full) ->
+    case length(string:tokens(Full, " ")) of
+	1 ->
+	    {true, Full};
+	_ ->
+	    false
+    end.
+
+%% add protocol if it is not in URL
 add_protocol("http://" ++ _Other, Full) ->
     Full;
 

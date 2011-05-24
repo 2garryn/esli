@@ -1,7 +1,8 @@
+%%% ---------------------------------------------------------------
 %%% File    : sli_web.erl
-%%% Author  : garry <garry@garry-desktop>
-%%% Description : 
-%%% Created : 10 May 2011 by garry <garry@garry-desktop>
+%%% Author  : Artem Golovinsky artemgolovinsky@gmail.com
+%%% Description : "loop"-file for MochiWeb
+%%% ---------------------------------------------------------------
 
 -module(sli_web).
 
@@ -29,10 +30,8 @@ loop(Req, DocRoot) ->
                       {type, Type}, {what, What},
                       {trace, erlang:get_stacktrace()}],
             error_logger:error_report(Report),
-	    Req:respond({501, [], "server_error"})
-            %% NOTE: mustache templates need \ because they are not awesome.
-%            Req:respond({500, [{"Content-Type", "text/plain"}],
- %                        "request failed, sorry\n"})
+	    server_error(Req)
+
     end.
 
 %%%
@@ -56,6 +55,9 @@ proceed_method2(_, _Path, Req, _DocRoot) ->
 %%% Start short link proceeding
 proceed_get_path("favicon.ico", Req, _DocRoot) ->
     not_found(Req);
+
+proceed_get_path([], Req, DocRoot) ->
+    index_file(Req, DocRoot);
 
 proceed_get_path(Path, Req, DocRoot) ->
     case is_users_file(Path, DocRoot) of    
@@ -121,6 +123,9 @@ get_short_link(false, Req, _DocRoot) ->
     
 %%% Helpers for answer
 
+index_file(Req, DocRoot) ->
+    Req:serve_file("index.html", DocRoot).    
+
 not_found_file(Req, DocRoot) ->
     Req:serve_file("not_found.html", DocRoot).
 
@@ -137,6 +142,7 @@ bad_request(Req) ->
     Req:respond({400, [], "bad_request"}).
     
 is_users_file(Path, DocRoot) ->
-    {ok, FileList} = file:list_dir(DocRoot),
-    lists:member(Path, FileList).
+    filelib:is_file(filename:join(DocRoot, Path)).
+%    {ok, FileList} = file:list_dir(DocRoot),
+%   lists:member(Path, FileList).
     

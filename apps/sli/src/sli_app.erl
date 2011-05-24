@@ -1,3 +1,9 @@
+%%% ---------------------------------------------------------------
+%%% File    : sli_app.erl
+%%% Author  : Artem Golovinsky artemgolovinsky@gmail.com
+%%% Description : 
+%%% ---------------------------------------------------------------
+
 -module(sli_app).
 
 -behaviour(application).

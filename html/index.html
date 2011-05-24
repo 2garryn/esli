@@ -1,0 +1,21 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+		<script type="text/javascript" src="js/req.js"></script>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>erlang web-link shortener</title>
+		</head>
+	<body >
+		<br>
+		<div align="center" width="100">
+		<h2 > Erlang web-link shortener </h2>
+		<form action="create" method="POST" onSubmit="return get_short_link();" >
+			<input type="text" id="input_url" maxlength="32768" size="100"><br><br>
+			<input type="button" name="send" value="Get Short Link!" onClick="return get_short_link();"  >
+		</form>
+		<br><br>	
+		<p id="sl_indicator"></p>
+		</div>
+	</body>
+</html>

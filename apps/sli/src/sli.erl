@@ -1,3 +1,9 @@
+%%% ---------------------------------------------------------------
+%%% File    : sli.erl
+%%% Author  : Artem Golovinsky artemgolovinsky@gmail.com
+%%% Description : Interface module for sli-core. 
+%%% ---------------------------------------------------------------
+
 -module(sli).
 
 -export([get_short_link/1, get_full_link/1]).
@@ -18,6 +24,7 @@ get_short_link(LongLink) ->
     end.
 
 %%% Get full link from short link Id
+
 get_full_link(SLId) ->
     sli_riakc_handler:request_full_link(self(), SLId),
     receive

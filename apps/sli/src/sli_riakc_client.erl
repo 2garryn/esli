@@ -1,3 +1,9 @@
+%%% ---------------------------------------------------------------
+%%% File    : sli_riakc_client.erl
+%%% Author  : Artem Golovinsky artemgolovinsky@gmail.com
+%%% Description : It is wrapper for riakc_pb client
+%%% ---------------------------------------------------------------
+
 -module(sli_riakc_client).
 
 -behaviour(gen_server).

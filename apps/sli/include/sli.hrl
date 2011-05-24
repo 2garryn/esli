@@ -1,3 +1,8 @@
+%%% ---------------------------------------------------------------
+%%% File    : sli.hrl
+%%% Author  : Artem Golovinsky artemgolovinsky@gmail.com
+%%% Description: 
+%%% ---------------------------------------------------------------
 
 %% riakc handler process identifier
 -define(RC_HANDLER, rc_handler).
@@ -21,4 +26,4 @@
 -define(MAX_LENGTH, 6).
 
 
--define(MAX_LONG_LINK_LENGTH, 32.768).
+-define(MAX_LONG_LINK_LENGTH, 32768).

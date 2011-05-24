@@ -1,3 +1,9 @@
+%%% ---------------------------------------------------------------
+%%% File    : sli_riakc_handler.erl
+%%% Author  : Artem Golovinsky artemgolovinsky@gmail.com
+%%% Description : Handler of pull of sli_riakc_clients
+%%% ---------------------------------------------------------------
+
 -module(sli_riakc_handler).
 
 -behaviour(gen_server).
@@ -13,9 +19,7 @@
 	 terminate/2, code_change/3]).
 
 -record(workers, {free=[],
-		  busy=[],
-		  read_queue=[],
-		  write_queue=[]
+		  busy=[]
 		 }).
 %%% --------------------------------------------------------
 %%% External API

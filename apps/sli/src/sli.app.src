@@ -1,3 +1,8 @@
+%%% ---------------------------------------------------------------
+%%% File    : sli.app.src
+%%% Author  : Artem Golovinsky artemgolovinsky@gmail.com
+%%% Description : 
+%%% ---------------------------------------------------------------
 {application, sli,
  [
   {description, "sli - to short web-links"},

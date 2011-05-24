@@ -1,10 +1,8 @@
-%%%-------------------------------------------------------------------
+%%% ---------------------------------------------------------------
 %%% File    : sli_riakc_sup.erl
-%%% Author  : garry <garry@garry-desktop>
+%%% Author  : Artem Golovinsky artemgolovinsky@gmail.com
 %%% Description : 
-%%%
-%%% Created : 31 Mar 2011 by garry <garry@garry-desktop>
-%%%-------------------------------------------------------------------
+%%% ---------------------------------------------------------------
 -module(sli_riakc_sup).
 
 -behaviour(supervisor).

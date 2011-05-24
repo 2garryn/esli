@@ -1,3 +1,9 @@
+%%% ---------------------------------------------------------------
+%%% File    : sli_sup.erl
+%%% Author  : Artem Golovinsky artemgolovinsky@gmail.com
+%%% Description : 
+%%% ---------------------------------------------------------------
+
 -module(sli_sup).
 
 -export([start_link/0, init/1]).
@@ -6,9 +12,6 @@
 
 start_link() ->
     supervisor:start_link({local, ?SUP_NAME}, ?MODULE, []).
-
-
-
 
 init([]) ->
     {ok, {{one_for_one, 10, 60},

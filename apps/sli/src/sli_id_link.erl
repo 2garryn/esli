@@ -1,3 +1,11 @@
+%%% ---------------------------------------------------------------
+%%% File    : sli_id_link.erl
+%%% Author  : Artem Golovinsky artemgolovinsky@gmail.com
+%%% Description : Generator of new web links id. 
+%%% Before using it, the file that stores the identifier when the gen-server is down, must be created. 
+%%% Firstly this file must contain "aaaaaa" string.
+%%% ---------------------------------------------------------------
+
 -module(sli_id_link).
 
 -behaviour(gen_server).
@@ -24,11 +32,11 @@ get_next_id() ->
 %% Callbacks
 
 init([]) ->
-    process_flag(trap_exit, true),
+    process_flag(trap_exit,true),
     case file:open(sli_conf:get_config(id_file_place),[write, read, raw]) of
 	{ok, Fd} ->
-	    State = make_state(Fd),
-	    {ok, State};
+%	    State = make_state(Fd),
+	    {ok, make_state(Fd)};
 	{error, Reason} ->
 	    {stop, Reason}
     end.
@@ -105,6 +113,7 @@ next_char2(Ch, [_|List]) ->
 
 
 update_file(State) ->
+    error_logger:info_msg("~n ~n SOMETHING ~n ~n"), 
     file:pwrite(State#state.fd, 0, State#state.last_id),
     file:close(State#state.fd).
 
