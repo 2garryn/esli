@@ -116,8 +116,7 @@ get_free(State) ->
 
 
 send2worker(FreeW, ReqPid, LongLink) ->
-    NextId = sli_id_link:get_next_id(),
-    sli_riakc_client:get_short_link(FreeW, ReqPid, LongLink, NextId).
+    sli_riakc_client:get_short_link(FreeW, ReqPid, LongLink).
 
 get_from_worker(FreeR, ReqPid, ShortLink) ->
     sli_riakc_client:get_full_link(FreeR, ReqPid, ShortLink).
