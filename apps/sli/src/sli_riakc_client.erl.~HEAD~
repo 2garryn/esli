@@ -9,7 +9,7 @@
 -behaviour(gen_server).
 
 %% API
--export([start_link/3, get_short_link/3, get_full_link/3]).
+-export([start_link/3, get_short_link/4, get_full_link/3]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
@@ -25,8 +25,8 @@
 start_link(Name, Host, Port) ->
     gen_server:start_link({local, Name}, ?MODULE, [Name, Host, Port], []).
 
-get_short_link(FreeW, ReqPid, LongLink) ->
-    gen_server:cast(FreeW, {get_short_link, ReqPid, LongLink}).     
+get_short_link(FreeW, ReqPid, LongLink, NextId) ->
+    gen_server:cast(FreeW, {get_short_link, ReqPid, LongLink, NextId}).     
 
 get_full_link(Free, ReqPid, ShortLink) ->
     gen_server:cast(Free, {get_full_link, ReqPid, ShortLink}).
@@ -44,25 +44,17 @@ handle_call(_Request, _From, State) ->
     Reply = ok,
     {reply, Reply, State}.
 
-handle_cast({get_short_link, ReqPid, LongLink}, State) ->
-    NewId = sli_id_link:get_id(LongLink),
-    EndedId = 
-	case riakc_pb_socket:get(State#state.pid, ?SL_BUCKET,  list_to_binary(NewId)) of
-	    {error, notfound} ->
-		NewId;
-	    _ ->
-		sli_id_link:get_solted_id(LongLink),
-	end,
-    Obj = riakc_obj:new(?SL_BUCKET, list_to_binary(EndedId), list_to_binary(LongLink)),
-    case riakc_pb_socket:put(Pid, Obj) of 
+handle_cast({get_short_link, ReqPid, LongLink, NextId}, State) ->
+    Obj = riakc_obj:new(?SL_BUCKET, list_to_binary(NextId), list_to_binary(LongLink)),
+    case riakc_pb_socket:put(State#state.pid, Obj) of 
 	ok ->
-	    ReqPid ! {short_link, EndedId};
+	    ReqPid ! {short_link, NextId},
+	    ?RC_HANDLER ! {free, State#state.name};
 	SomeThing ->
-	    error_logger:error_msg("Put to riak error: ~p ~n", [SomeThing])
+	    error_logger:error_msg("Put to riak error: ~p ~n", [SomeThing]),
+	    ?RC_HANDLER ! {free, State#state.name}
     end,
-    ?RC_HANDLER ! {free, State#state.name},
     {noreply, State};
-
 
 handle_cast({get_full_link, ReqPid, ShortLink}, State) ->
     case riakc_pb_socket:get(State#state.pid,?SL_BUCKET, list_to_binary(ShortLink)) of
@@ -87,5 +79,3 @@ terminate(Reason, _State) ->
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
-
-    
