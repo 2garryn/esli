@@ -15,9 +15,7 @@ start_link() ->
 
 init([]) ->
     {ok, {{one_for_one, 10, 60},
-	  [{sli_id_link, {sli_id_link, start_link, []},
-	    permanent, 5000, worker, []},
-	  {sli_riakc_sup, {sli_riakc_sup, start_link, []},
+	  [{sli_riakc_sup, {sli_riakc_sup, start_link, []},
 	    permanent, 5000, supervisor, []},
 	  {sli_riakc_handler, {sli_riakc_handler, start_link, [sli_conf:get_config(riak_host),
 							       sli_conf:get_config(riak_port),
