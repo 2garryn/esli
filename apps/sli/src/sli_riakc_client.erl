@@ -45,20 +45,14 @@ handle_call(_Request, _From, State) ->
     {reply, Reply, State}.
 
 handle_cast({get_short_link, ReqPid, LongLink}, State) ->
-    NewId = sli_id_link:get_id(LongLink),
-    EndedId = 
-	case riakc_pb_socket:get(State#state.pid, ?SL_BUCKET,  list_to_binary(NewId)) of
-	    {error, notfound} ->
-		NewId;
-	    _ ->
-		sli_id_link:get_solted_id(LongLink),
-	end,
+    EndedId =  get_my_id(LongLink, State#state.pid),
     Obj = riakc_obj:new(?SL_BUCKET, list_to_binary(EndedId), list_to_binary(LongLink)),
-    case riakc_pb_socket:put(Pid, Obj) of 
+    case riakc_pb_socket:put(State#state.pid, Obj) of 
 	ok ->
 	    ReqPid ! {short_link, EndedId};
 	SomeThing ->
-	    error_logger:error_msg("Put to riak error: ~p ~n", [SomeThing])
+	    error_logger:error_msg("Put to riak error: ~p ~n", [SomeThing]),
+	    ReqPid ! error
     end,
     ?RC_HANDLER ! {free, State#state.name},
     {noreply, State};
@@ -68,12 +62,11 @@ handle_cast({get_full_link, ReqPid, ShortLink}, State) ->
     case riakc_pb_socket:get(State#state.pid,?SL_BUCKET, list_to_binary(ShortLink)) of
 	{ok, Data} ->
 	    BinData =  riakc_obj:get_value(Data),
-	    ReqPid ! {full_link, binary_to_list(BinData)},
-	    ?RC_HANDLER ! {free, State#state.name};
+	    ReqPid ! {full_link, binary_to_list(BinData)};
 	_ ->
-	    ReqPid ! {error, 404},
-	    ?RC_HANDLER ! {free, State#state.name}
+	    ReqPid ! {error, 404}
     end,
+    ?RC_HANDLER ! {free, State#state.name},
     {noreply, State}.  
 
 handle_info(_Info, State) ->
@@ -88,4 +81,14 @@ code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
 
+get_my_id(Text, Pid) -> 
+    get_my_pid(Text, sli_id_link:get_id(Text), Pid).
     
+get_my_pid(Text, LinkId, Pid) ->
+    case riakc_pb_socket:get(Pid, ?SL_BUCKET,  list_to_binary(LinkId)) of
+	{error, notfound} ->
+	    LinkId;
+	_ ->
+	    NewLI = sli_id_link:get_solted_id(Text),
+	    get_my_pid(Text, NewLI, Pid)
+    end.    

@@ -143,6 +143,5 @@ bad_request(Req) ->
     
 is_users_file(Path, DocRoot) ->
     filelib:is_file(filename:join(DocRoot, Path)).
-%    {ok, FileList} = file:list_dir(DocRoot),
-%   lists:member(Path, FileList).
+
     
