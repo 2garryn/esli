@@ -14,12 +14,12 @@ Riak key-store
    
    `$ git clone https://github.com/2garryn/esli`
    
-2. Go to esli directory and make it:
+2. Go to _esli_ directory and make it:
 
    `$ make`
 
 3. Before using _esli_ start your _Riak_ node.
-4. When _riak_ node is started you can start _esli_:
+4. When _Riak_ node is started you can start _esli_:
 
    `$ rel/slinode/bin/slinode start`
    
@@ -31,7 +31,7 @@ Riak key-store
 
    `$ rel/slinode/bin/slinode stop`
    
-By default _esli_ server is assigned on 8081 port of http://localhost, i.e. to make short link you should open http://localhost:8081/ in your web-browser.
+By default _esli_ server is listening 8081 port of http://localhost, i.e. to make short link you should open http://localhost:8081/ in your web-browser.
 On real server you can set other port and host in etc/app.config in _slinode_ directory. Anyway, look at this file :-).
 All data is written to _sl_ bucket in _Riak_.
 
