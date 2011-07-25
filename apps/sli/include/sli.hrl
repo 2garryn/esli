@@ -21,7 +21,7 @@
 
 -define(SUP_NAME, sli_sup).
 
--define(CHARS, "abcdefghjiklmnopqrstuvwxyzABCDEFGHJIKLMNOPQRSTUVWXYZ+-1234567890").
+-define(CHARS, "abcdefghjiklmnopqrstuvwxyzABCDEFGHJIKLMNOPQRSTUVWXYZ_-1234567890").
 
 -define(MAX_LENGTH, 6).
 

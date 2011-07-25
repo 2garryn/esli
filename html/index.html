@@ -1,21 +1,29 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
-	<head>
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-		<script type="text/javascript" src="js/req.js"></script>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>erlang web-link shortener</title>
-		</head>
-	<body >
-		<br>
-		<div align="center" width="100">
-		<h2 > Erlang web-link shortener </h2>
-		<form action="create" method="POST" onSubmit="return get_short_link();" >
-			<input type="text" id="input_url" maxlength="32768" size="100"><br><br>
-			<input type="button" name="send" value="Get Short Link!" onClick="return get_short_link();"  >
-		</form>
-		<br><br>	
-		<p id="sl_indicator"></p>
-		</div>
-	</body>
+  <head>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/helper.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title> aes.li - web-url shortener</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+  </head>
+  <body>
+    <div id="logo"></div>
+    <div id="header"><span id="header_text">Web-url shortener</span></div>
+    <br />
+    <div id="field">
+      <input type="text" id="input_url" maxlength="32768" size="120">
+    </div>
+    <br />
+    <div id="button">
+     	<input type="button" id="b1" name="Get it shorter!" value="Get it shorter!" onmouseover="on_button();" onmouseout="out_button();" onclick="return request();"> 
+    </div>
+    <div id="short_link">
+      <span id="msg_field"></span>
+      <a href="" id="is_link"></a> 
+    </div>  
+    <div id="long_link">
+      <a id="is_long_link" href=""></a>
+    </div>
+  </body>
 </html>

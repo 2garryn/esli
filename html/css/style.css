@@ -1,0 +1,84 @@
+#logo{
+    height: 160px;
+}
+
+#header{
+    text-align: center;
+    height: 20%;    
+}
+
+#header_text{
+    font-family: arial, verdana, trebuchet;
+    font-weight: normal;
+    font-size: 2em;
+}
+
+#field{
+    text-align: center;
+    width: 100%; 
+    height: 10%;
+}
+
+#input_url{
+  border: thin solid black;
+  width: 70%;
+  padding: 0.3em 0.3em 0.3em 0.3em;
+  font-family: arial, verdana, trebuchet;
+  font-weight: normal;
+  font-size: 0.9em;
+}
+
+#button{
+    text-align: right;
+}
+
+#b1{
+    padding: 0.3em 0.6em 0.3em 0.6em;
+    margin-right: 15%;  
+    font-family: arial, verdana, trebuchet;
+    font-weight: normal;
+    font-size: 1em;
+    border: 1px solid black;
+    background-color: #cccccc;
+    color: #000000;
+}
+    
+#short_link{
+    padding-top: 5%; 
+    text-align: center;
+}
+
+#is_link{
+    color: #000000;
+    font-size: 2em;
+    text-decoration: underline;
+}
+#is_link:hover{
+    color: #000000;
+    font-size: 2em;
+    text-decoration: none;
+}
+
+#copy{
+    font-family: arial, verdana, trebuchet;
+    padding-left: 25%;
+    padding-top: 5%; 
+    color: #999999;
+    font-size: 1.5em;
+}
+
+#msg_field{
+    font-family: serif;
+    color: #FF0000;
+    font-size: 2em;
+}
+
+#long_link{
+    padding-top: 5%;
+    text-align: center;   
+} 
+    
+#is_long_link{
+    font-size: 1em; 
+    color: #999999;
+}
