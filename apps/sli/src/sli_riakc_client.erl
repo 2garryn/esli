@@ -46,7 +46,10 @@ handle_call(_Request, _From, State) ->
 
 handle_cast({get_short_link, ReqPid, LongLink}, State) ->
     EndedId =  get_my_id(LongLink, State#state.pid),
-    Obj = riakc_obj:new(?SL_BUCKET, list_to_binary(EndedId), list_to_binary(LongLink)),
+    Obj = riakc_obj:new(?SL_BUCKET, 
+                        list_to_binary(EndedId), 
+                        json_view(LongLink, EndedId), 
+                        "application/json"),
     case riakc_pb_socket:put(State#state.pid, Obj) of 
 	ok ->
 	    ReqPid ! {short_link, EndedId};
@@ -91,3 +94,36 @@ get_my_pid(Text, LinkId, Pid) ->
 	    NewLI = sli_id_link:get_solted_id(Text),
 	    get_my_pid(Text, NewLI, Pid)
     end.    
+
+
+
+
+%%% ---------------------------------------------
+%%% JSON view of long link
+%%% 
+%%% {link:  "http://long_link",
+%%%  short: "qWeD12",
+%%%  created: 123123123, - unix epoch
+%%%  updated: 123123123}
+
+json_view(Long, Short) ->
+    UnixEpoch = unix_epoch_now(),
+    Json = struct(Long, UnixEpoch, UnixEpoch, Short), 
+    iolist_to_binary(mochijson2:encode(Json)).
+
+
+struct(Long,Created, Updated, Short) ->
+    {struct,
+       [
+	 {link, list_to_binary(Long)},
+         {short,list_to_binary(Short)},
+         {created, Created},
+         {updated, Updated}
+       ]
+    }. 
+
+unix_epoch_now() ->
+    Date = erlang:date(),
+    Time = erlang:time(),
+    calendar:datetime_to_gregorian_seconds({Date,Time}).    
+    
