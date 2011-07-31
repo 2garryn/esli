@@ -48,7 +48,7 @@ handle_cast({get_short_link, ReqPid, LongLink}, State) ->
     EndedId =  get_my_id(LongLink, State#state.pid),
     Obj = riakc_obj:new(?SL_BUCKET, 
                         list_to_binary(EndedId), 
-                        json_view(LongLink, EndedId), 
+                        json_view(list_to_binary(LongLink), list_to_binary(EndedId)), 
                         "application/json"),
     case riakc_pb_socket:put(State#state.pid, Obj) of 
 	ok ->
@@ -63,9 +63,10 @@ handle_cast({get_short_link, ReqPid, LongLink}, State) ->
 
 handle_cast({get_full_link, ReqPid, ShortLink}, State) ->
     case riakc_pb_socket:get(State#state.pid,?SL_BUCKET, list_to_binary(ShortLink)) of
-	{ok, Data} ->
-	    BinData =  riakc_obj:get_value(Data),
-	    ReqPid ! {full_link, binary_to_list(BinData)};
+	{ok, RiakData} ->
+	    Full = get_full_from_obj(RiakData),
+	    ReqPid ! {full_link, binary_to_list(Full)},
+	    update_got_date(RiakData, State#state.pid);
 	_ ->
 	    ReqPid ! {error, 404}
     end,
@@ -115,10 +116,10 @@ json_view(Long, Short) ->
 struct(Long,Created, Updated, Short) ->
     {struct,
        [
-	 {link, list_to_binary(Long)},
-         {short,list_to_binary(Short)},
+	 {link, Long},
+         {short,Short},
          {created, Created},
-         {updated, Updated}
+         {got, Updated}
        ]
     }. 
 
@@ -127,3 +128,38 @@ unix_epoch_now() ->
     Time = erlang:time(),
     calendar:datetime_to_gregorian_seconds({Date,Time}).    
     
+get_full_from_obj(RiakData) ->
+    case riakc_obj:get_content_type(RiakData) of
+	"application/json" ->
+	    io:format("APP JSON"),
+	    {struct, Fields} = mochijson2:decode(riakc_obj:get_value(RiakData)),
+	    io:format("FIELDS = ~p ~n",[Fields]),
+	    proplists:get_value(<<"link">>, Fields, "not_found");
+	_ ->
+	    io:format("STRING ~n"),
+	    riakc_obj:get_value(RiakData)
+    end.
+	    
+	
+
+update_got_date(RiakData, Pid) ->
+    PutToRiak = 
+    case riakc_obj:get_content_type(RiakData) of
+	"application/json" ->
+	    {struct, Fields} = mochijson2:decode(riakc_obj:get_value(RiakData)),
+	    NewList = lists:keyreplace(<<"got">>, 1, Fields, {<<"got">>, unix_epoch_now()}),
+	    NewObj = iolist_to_binary(mochijson2:encode({struct, NewList})),
+	    riakc_obj:update_value(RiakData, NewObj);
+	_ ->
+	    NewJson = json_view(riakc_obj:get_value(RiakData), riakc_obj:key(RiakData)),
+	    riakc_obj:update_value(RiakData, NewJson, "application/json")
+    end,
+    riakc_pb_socket:put(Pid, PutToRiak).
+	    
+	    
+
+
+    
+    
+    
+
