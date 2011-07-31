@@ -131,12 +131,9 @@ unix_epoch_now() ->
 get_full_from_obj(RiakData) ->
     case riakc_obj:get_content_type(RiakData) of
 	"application/json" ->
-	    io:format("APP JSON"),
 	    {struct, Fields} = mochijson2:decode(riakc_obj:get_value(RiakData)),
-	    io:format("FIELDS = ~p ~n",[Fields]),
 	    proplists:get_value(<<"link">>, Fields, "not_found");
 	_ ->
-	    io:format("STRING ~n"),
 	    riakc_obj:get_value(RiakData)
     end.
 	    
