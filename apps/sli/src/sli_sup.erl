@@ -22,5 +22,8 @@ init([]) ->
 							       sli_conf:get_config(worker_set)]},
 	    permanent, 5000, worker, []},
 	  {sli_web, {sli_web, start, []}, 
-	   permanent, 5000, worker, dynamic}
+	   permanent, 5000, worker, dynamic},
+	  {sli_admin, {sli_admin, start_link,  [sli_conf:get_config(riak_host),
+						sli_conf:get_config(riak_port)]},
+	   permanent, 5000, supervisor, []}
 	  ]}}.

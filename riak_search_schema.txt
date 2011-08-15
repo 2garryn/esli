@@ -1,0 +1,39 @@
+{
+    schema,
+    [
+        {version, "1.1"},
+        {default_field, "got"},
+        {default_op, "and"},
+        {n_val, 3}
+    ],
+    [
+        {field, [
+            {name, "id"},
+            {analyzer_factory, {erlang, text_analyzers, noop_analyzer_factory}}
+        ]},
+	{field, [
+            {name, "short"},
+            {analyzer_factory, {erlang, text_analyzers, noop_analyzer_factory}}
+        ]},
+        {field, [
+            {name, "link"},
+            {required, true},
+            {analyzer_factory, {erlang, text_analyzers, noop_analyzer_factory}}
+        ]},
+        {field, [
+            {name, "created"},
+            {type, integer},
+            {padding_size, 15},
+	    {analyzer_factory, {erlang, text_analyzers, integer_analyzer_factory}}
+        ]},
+        {field, [
+            {name, "got"},
+            {type, integer},
+            {padding_size, 15},
+	    {analyzer_factory, {erlang, text_analyzers, integer_analyzer_factory}}
+        ]},
+        {dynamic_field, [
+            {name, "*"}
+        ]}
+    ]
+}.
