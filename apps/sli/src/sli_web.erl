@@ -10,8 +10,13 @@
 
 -export([start/0, loop/2]).
 
+-define(REQUEST_TIMEOUT, 3000).
+
 start() ->
     DocRoot = sli_conf:get_config(docroot),
+    ets:new(clients_ip, [duplicate_bag,
+			 public,
+			 named_table]),
     Loop = fun (Req) ->
                    ?MODULE:loop(Req,DocRoot)
 	   end,
@@ -21,6 +26,7 @@ start() ->
 
 loop(Req, DocRoot) ->
     "/" ++ Path = Req:get(path),
+
     try
 	proceed_method(Path, Req, DocRoot)
     catch
@@ -98,8 +104,16 @@ proceed_file(Path, Req, DocRoot) ->
 
 %%% Start full link proceeding
 proceed_post_path("create", Req, DocRoot) -> 
-    Link = binary_to_list(Req:recv_body()),
-    get_short_link(sli_checker:check_and_update_full(Link), Req, DocRoot);
+    Ip = Req:get(peer),
+    case ets:member(clients_ip, Ip) of
+	true ->
+	    Req:respond({423, [], ""});
+	false ->
+	    ets:insert(clients_ip, {Ip}),
+	    timer:apply_after(?REQUEST_TIMEOUT, ets, delete, [clients_ip, Ip]),
+	    Link = binary_to_list(Req:recv_body()),
+	    get_short_link(sli_checker:check_and_update_full(Link), Req, DocRoot)
+    end;
 
 proceed_post_path(_, Req, _DocRoot) ->
     bad_request(Req).
@@ -143,5 +157,6 @@ bad_request(Req) ->
     
 is_users_file(Path, DocRoot) ->
     filelib:is_file(filename:join(DocRoot, Path)).
+
 
     

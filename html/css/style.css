@@ -82,3 +82,9 @@
     font-size: 1em; 
     color: #999999;
 }
+
+#counter{
+    margin-right: 25%;
+    font-size: 2em;
+    color: #FF0000;
+}

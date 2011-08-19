@@ -3,6 +3,8 @@
 
 var link_is_shown = false;
 var is_grey = false;
+var time = 3;
+var timer_descr = 0;
 
 $(function () {
   $(window).load(function () {
@@ -19,30 +21,13 @@ $(document).ready(function(){
 	   $(this).css( 'color', '#999999');
    }
        );
-   $('#input_url').focus(function() {
-	   //	alert("one");
-	if (link_is_shown){
-	    $('#is_link').css('color','#cccccc');
-	    $('#is_long_link').css('color','#cccccc');
-	    is_grey = true;
-	};
-		
-   });
-
-   $('#input_url').focusout(function() {
-	   //		alert("two");
-	if (is_grey){
-	    $('#is_link').css('color','#000000');
-	    $('#is_long_link').css('color','#999999');
-	    is_grey = false;
-	};
-   });
 	   
 });
 
 $(document).keypress(function(e) {
     if(e.which == 13) {
         request();
+
     }
 });
 
@@ -60,6 +45,7 @@ function out_button(){
 
 
 function request(){
+
     var value = jQuery.trim($('#input_url').val());   
     if (value != ""){
 	if (check_valid(value)){
@@ -156,11 +142,14 @@ function send_request(value){
 		success: function(response){processing_ok(response);},
 		dataType: "text",
 		statusCode: {
-			400: function() {
-				processing_bad_request()
+		    400: function() {
+		    processing_bad_request()
 			},
-			501: function() {
-				processing_server_error()
+		    501: function() {
+		    processing_server_error()
+			},
+		    423: function() {
+		    return 0
 			}
 		}
 	});
@@ -174,6 +163,7 @@ function processing_ok(response){
     clear_is_long_link();
     show_is_long_link(ll);
     clear_input_url();
+    disabling();
 }
 
 function processing_bad_request(){
@@ -188,3 +178,24 @@ function cut_long_url(str, len){
     return str;
 }
 
+function disabling(){
+    $('#input_url').attr('disabled','disabled');
+    $('#b1').attr('disabled','disabled');
+    $('#counter').text(time);
+    timer_descr = setInterval(function() {check_int()}, 1000);
+    return 0;
+}
+
+function check_int(){
+    time -= 1;
+    if (time == 0){
+	$('#input_url').removeAttr('disabled');
+	$('#b1').removeAttr('disabled');
+	$('#counter').text('');
+	time = 3;
+	clearInterval(timer_descr);
+	$('#input_url').focus();
+    } else {
+	$('#counter').text(time);
+    }
+}
