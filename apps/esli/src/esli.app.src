@@ -1,11 +1,11 @@
 %%% ---------------------------------------------------------------
-%%% File    : sli.app.src
+%%% File    : esli.app.src
 %%% Author  : Artem Golovinsky artemgolovinsky@gmail.com
 %%% Description : 
 %%% ---------------------------------------------------------------
-{application, sli,
+{application, esli,
  [
-  {description, "sli - to short web-links"},
+  {description, "esli - to short web-links"},
   {vsn, "1"},
   {registered, []},
   {applications, [
@@ -14,6 +14,6 @@
 		  riakc,
 		  mochiweb
                  ]},
-  {mod, { sli_app, []}},
+  {mod, { esli_app, []}},
   {env, []}
  ]}.

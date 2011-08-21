@@ -1,10 +1,10 @@
 %%% ---------------------------------------------------------------
-%%% File    : sli_app.erl
+%%% File    : esli_app.erl
 %%% Author  : Artem Golovinsky artemgolovinsky@gmail.com
 %%% Description : 
 %%% ---------------------------------------------------------------
 
--module(sli_app).
+-module(esli_app).
 
 -behaviour(application).
 
@@ -16,7 +16,7 @@
 %% ===================================================================
 
 start(_StartType, _StartArgs) ->
-    sli_sup:start_link().
+    esli_sup:start_link().
 
 stop(_State) ->
     ok.

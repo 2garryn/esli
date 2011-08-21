@@ -1,26 +1,26 @@
 %%% ---------------------------------------------------------------
-%%% File    : sli_web.erl
+%%% File    : esli_web.erl
 %%% Author  : Artem Golovinsky artemgolovinsky@gmail.com
 %%% Description : "loop"-file for MochiWeb
 %%% ---------------------------------------------------------------
 
--module(sli_web).
+-module(esli_web).
 
--include("sli.hrl").
+-include("esli.hrl").
 
 -export([start/0, loop/2]).
 
 -define(REQUEST_TIMEOUT, 3000).
 
 start() ->
-    DocRoot = sli_conf:get_config(docroot),
+    DocRoot = esli_conf:get_config(docroot),
     ets:new(clients_ip, [duplicate_bag,
 			 public,
 			 named_table]),
     Loop = fun (Req) ->
                    ?MODULE:loop(Req,DocRoot)
 	   end,
-    WebConfig = sli_conf:get_config(web),
+    WebConfig = esli_conf:get_config(web),
     mochiweb_http:start([{name, ?MODULE}, 
 			 {loop, Loop} | WebConfig]).
 
@@ -74,14 +74,14 @@ proceed_get_path(Path, Req, DocRoot) ->
     end.
 
 proceed_short_link(Path, Req, DocRoot) when length(Path) =:= ?MAX_LENGTH ->
-    get_full_link(sli_checker:check_short(Path), Path, Req, DocRoot);
+    get_full_link(esli_checker:check_short(Path), Path, Req, DocRoot);
 
 proceed_short_link(_Path, Req, DocRoot) ->
     not_found_file(Req, DocRoot).
 
 
 get_full_link(true, Path, Req, DocRoot) ->
-    try sli:get_full_link(Path) of
+    try esli:get_full_link(Path) of
 	{full_link, Fl} ->
 	    Req:respond({301,[{"Location",Fl}], []});
 	{error, 404} ->
@@ -112,16 +112,16 @@ proceed_post_path("create", Req, DocRoot) ->
 	    ets:insert(clients_ip, {Ip}),
 	    timer:apply_after(?REQUEST_TIMEOUT, ets, delete, [clients_ip, Ip]),
 	    Link = binary_to_list(Req:recv_body()),
-	    get_short_link(sli_checker:check_and_update_full(Link), Req, DocRoot)
+	    get_short_link(esli_checker:check_and_update_full(Link), Req, DocRoot)
     end;
 
 proceed_post_path(_, Req, _DocRoot) ->
     bad_request(Req).
 
 get_short_link({true, UpdatedLink}, Req, _DocRoot) ->
-    try sli:get_short_link(UpdatedLink) of
+    try esli:get_short_link(UpdatedLink) of
 	{short_link, SLink} ->
-	    Req:ok({"text/html",[], [sli_conf:get_config(domain) ++ "/" ++ SLink]});
+	    Req:ok({"text/html",[], [esli_conf:get_config(domain) ++ "/" ++ SLink]});
 	{error, 501} ->
 	    server_error(Req)
     catch 

@@ -1,13 +1,13 @@
 %%% ---------------------------------------------------------------
-%%% File    : sli_riakc_sup.erl
+%%% File    : esli_riakc_sup.erl
 %%% Author  : Artem Golovinsky artemgolovinsky@gmail.com
 %%% Description : 
 %%% ---------------------------------------------------------------
--module(sli_riakc_sup).
+-module(esli_riakc_sup).
 
 -behaviour(supervisor).
 
--include("sli.hrl").
+-include("esli.hrl").
 
 %% API
 -export([start_link/0]).

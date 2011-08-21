@@ -1,16 +1,16 @@
 %%% ---------------------------------------------------------------
-%%% File    : sli_riakc_handler.erl
+%%% File    : esli_riakc_handler.erl
 %%% Author  : Artem Golovinsky artemgolovinsky@gmail.com
-%%% Description : Handler of pull of sli_riakc_clients
+%%% Description : Handler of pull of esli_riakc_clients
 %%% ---------------------------------------------------------------
 
--module(sli_riakc_handler).
+-module(esli_riakc_handler).
 
 -behaviour(gen_server).
 
 %%% Defines
 
--include("sli.hrl").
+-include("esli.hrl").
 %% API
 -export([start_link/3, request_short_link/2, request_full_link/2]).
 
@@ -116,10 +116,10 @@ get_free(State) ->
 
 
 send2worker(FreeW, ReqPid, LongLink) ->
-    sli_riakc_client:get_short_link(FreeW, ReqPid, LongLink).
+    esli_riakc_client:get_short_link(FreeW, ReqPid, LongLink).
 
 get_from_worker(FreeR, ReqPid, ShortLink) ->
-    sli_riakc_client:get_full_link(FreeR, ReqPid, ShortLink).
+    esli_riakc_client:get_full_link(FreeR, ReqPid, ShortLink).
 
 make_free(Id, State) ->
     NewBusy = lists:delete(Id, State#workers.busy),
@@ -128,5 +128,5 @@ make_free(Id, State) ->
 		  free=NewFree}.
     
 get_child_spec(Host, Port, NewName) ->
-    {NewName, {sli_riakc_client, start_link, [NewName, Host, Port]}, transient, brutal_kill, worker, [sli_riakc_client]}.
+    {NewName, {esli_riakc_client, start_link, [NewName, Host, Port]}, transient, brutal_kill, worker, [esli_riakc_client]}.
 

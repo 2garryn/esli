@@ -1,14 +1,14 @@
 %%% ---------------------------------------------------------------
-%%% File    : sli_id_link.erl
+%%% File    : esli_id_link.erl
 %%% Author  : Artem Golovinsky artemgolovinsky@gmail.com
 %%% Description : Generator of new web links id. 
 %%%
 %%% ---------------------------------------------------------------
--module(sli_id_link).
+-module(esli_id_link).
 
 -export([get_id/1, get_solted_id/1]).
 
--include("sli.hrl").
+-include("esli.hrl").
 
 get_id(Text) ->
     <<Bits:34, _:94>> = erlang:md5(Text),

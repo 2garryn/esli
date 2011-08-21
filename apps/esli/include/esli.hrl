@@ -1,5 +1,5 @@
 %%% ---------------------------------------------------------------
-%%% File    : sli.hrl
+%%% File    : esli.hrl
 %%% Author  : Artem Golovinsky artemgolovinsky@gmail.com
 %%% Description: 
 %%% ---------------------------------------------------------------
@@ -8,18 +8,18 @@
 -define(RC_HANDLER, rc_handler).
 
 %% riakc supervisor identifier
--define(SV_NAME, sli_riakc_sup).
+-define(SV_NAME, esli_riakc_sup).
 
 %% Name of Readers
 -define(WC_NAME, "riakc_client").
 
 %% Name of writers
 
--define(SL_BUCKET, <<"sl">>).
+-define(SL_BUCKET, <<"esli">>).
 
 -define(ID_LINK, id_link).
 
--define(SUP_NAME, sli_sup).
+-define(SUP_NAME, esli_sup).
 
 -define(CHARS, "abcdefghjiklmnopqrstuvwxyzABCDEFGHJIKLMNOPQRSTUVWXYZ_-1234567890").
 

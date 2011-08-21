@@ -21,22 +21,22 @@ Riak key-store
 3. Before using _esli_ start your _Riak_ node.
 4. When _Riak_ node is started you can start _esli_:
 
-   `$ rel/slinode/bin/slinode start`
+   `$ rel/esli/bin/esli start`
    
-   `$ rel/slinode/bin/slinode ping`
+   `$ rel/esli/bin/esli ping`
    
    `pong`
    
 5. To stop url-shortener:
 
-   `$ rel/slinode/bin/slinode stop`
+   `$ rel/esli/bin/esli stop`
    
 By default _esli_ server is listening 8081 port of http://localhost, i.e. to make short link you should open http://localhost:8081/ in your web-browser.
-On real server you can set other port and host in etc/app.config in _slinode_ directory. Anyway, look at this file :-).
+On real server you can set other port and host in etc/app.config in _esli_ directory. Anyway, look at this file :-).
 All data is written to _sl_ bucket in _Riak_.
 
 
-Also, you can look at slinode/var/htdocs, there is html-pages, which user get.
+Also, you can look at esli/var/htdocs, there is html-pages, which user get.
 
 ### License ###
 

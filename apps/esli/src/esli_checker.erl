@@ -1,13 +1,13 @@
 %%% ---------------------------------------------------------------
-%%% File    : sli_checker.erl
+%%% File    : esli_checker.erl
 %%% Author  : Artem Golovinsky artemgolovinsky@gmail.com
 %%% Description : 
 %%% ---------------------------------------------------------------
 
 
--module(sli_checker).
+-module(esli_checker).
 
--include("sli.hrl").
+-include("esli.hrl").
 
 -export([check_short/1, check_and_update_full/1]).
 

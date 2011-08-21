@@ -1,10 +1,10 @@
--module(sli_admin).
+-module(esli_admin).
 
 -export([start_link/2,count_url_per_date/2,remove_last_month/1]).
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
 	 terminate/2, code_change/3]).
 -record(state, {pid}).
--include("sli.hrl").
+-include("esli.hrl").
 -define(SEC_IN_MONTH, 2592000). %% 30 days
 -define(REQUEST_TIMEOUT, 30000).
 %%% --------------------------------------------------------

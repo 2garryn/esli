@@ -1,10 +1,10 @@
 %%% ---------------------------------------------------------------
-%%% File    : sli.erl
+%%% File    : esli.erl
 %%% Author  : Artem Golovinsky artemgolovinsky@gmail.com
-%%% Description : Interface module for sli-core. 
+%%% Description : Interface module for esli-core. 
 %%% ---------------------------------------------------------------
 
--module(sli).
+-module(esli).
 
 -export([get_short_link/1, get_full_link/1]).
 
@@ -12,7 +12,7 @@
 %%% Get short link Id from full link
 
 get_short_link(LongLink) ->
-    sli_riakc_handler:request_short_link(self(), LongLink),
+    esli_riakc_handler:request_short_link(self(), LongLink),
     receive
 	{short_link, SLId} ->
 	    {short_link, SLId};
@@ -26,7 +26,7 @@ get_short_link(LongLink) ->
 %%% Get full link from short link Id
 
 get_full_link(SLId) ->
-    sli_riakc_handler:request_full_link(self(), SLId),
+    esli_riakc_handler:request_full_link(self(), SLId),
     receive
 	{full_link, FullLink} ->
 	    {full_link,FullLink};

@@ -1,9 +1,9 @@
 
-# Makefile for sli
+# Makefile for esli
 # Artem Golovinsky <artemgolovinsky@gmail.com>
 
 REBAR = ./rebar
-REL_ROOT = rel/slinode
+REL_ROOT = rel/esli
 HTDOCS = $(REL_ROOT)/var/htdocs
 
 all: get-deps compile generate 
@@ -17,7 +17,7 @@ compile: get-deps
 
 generate: get-deps compile
 	$(REBAR) generate
-	chmod 755 $(REL_ROOT)/bin/slinode
+	chmod 755 $(REL_ROOT)/bin/esli
 	cp -R html/* $(HTDOCS)
 
 clean:

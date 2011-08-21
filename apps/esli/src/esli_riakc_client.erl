@@ -1,10 +1,10 @@
 %%% ---------------------------------------------------------------
-%%% File    : sli_riakc_client.erl
+%%% File    : esli_riakc_client.erl
 %%% Author  : Artem Golovinsky artemgolovinsky@gmail.com
 %%% Description : It is wrapper for riakc_pb client
 %%% ---------------------------------------------------------------
 
--module(sli_riakc_client).
+-module(esli_riakc_client).
 
 -behaviour(gen_server).
 
@@ -17,7 +17,7 @@
 
 -record(state, {pid, name, req_id}).
 
--include("sli.hrl").
+-include("esli.hrl").
 
 %% -------------------------------------------
 %% Interface function
@@ -85,14 +85,14 @@ code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
 get_my_id(Text, Pid) -> 
-    get_my_pid(Text, sli_id_link:get_id(Text), Pid).
+    get_my_pid(Text, esli_id_link:get_id(Text), Pid).
     
 get_my_pid(Text, LinkId, Pid) ->
     case riakc_pb_socket:get(Pid, ?SL_BUCKET,  list_to_binary(LinkId)) of
 	{error, notfound} ->
 	    LinkId;
 	_ ->
-	    NewLI = sli_id_link:get_solted_id(Text),
+	    NewLI = esli_id_link:get_solted_id(Text),
 	    get_my_pid(Text, NewLI, Pid)
     end.    
 
